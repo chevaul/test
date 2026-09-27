@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Wildgene: a wildlife and evolution simulator</title>
+  <meta name="description" content="A living 2D world where animals find food and water, and evolve through real-style genetics.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦌</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/ui/styles.css">
+</head>
+<body>
+  <div class="app">
+    <main class="stage" id="stage">
+      <canvas id="world" aria-label="Map of the simulated world. Drag to move, scroll or pinch to zoom." role="img"></canvas>
+      <p class="stage-hint" id="stageHint">Drag to move. Scroll or pinch to zoom.</p>
+    </main>
+
+    <aside class="panel" aria-label="Simulation controls and readouts">
+      <header class="masthead">
+        <h1>Wildgene</h1>
+        <p class="lede">Milestone 1: the world and its climate. Animals arrive in Milestone 2.</p>
+      </header>
+
+      <section class="almanac" aria-label="Date and weather">
+        <svg class="dial" id="dial" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="47" class="dial-track"/>
+          <path id="arcSpring" class="dial-arc spring"/>
+          <path id="arcSummer" class="dial-arc summer"/>
+          <path id="arcAutumn" class="dial-arc autumn"/>
+          <path id="arcWinter" class="dial-arc winter"/>
+          <circle id="dialMark" cx="60" cy="13" r="5.5" class="dial-mark"/>
+          <text x="60" y="58" class="dial-season" id="dialSeason">Spring</text>
+          <text x="60" y="76" class="dial-day" id="dialDay">Day 1 of 7</text>
+        </svg>
+        <dl class="almanac-read">
+          <div><dt>Year</dt><dd id="readYear">1</dd></div>
+          <div><dt>Time</dt><dd id="readClock">06:00</dd></div>
+          <div><dt>Air by the lakes</dt><dd id="readTemp">10 °C</dd></div>
+          <div><dt>Sky</dt><dd id="readWeather">Clear</dd></div>
+        </dl>
+      </section>
+
+      <section class="controls" aria-label="Playback">
+        <button class="btn primary" id="playBtn" type="button" aria-pressed="true">Pause</button>
+        <div class="speed" role="group" aria-label="Speed">
+          <button type="button" data-speed="1" aria-pressed="true">1×</button>
+          <button type="button" data-speed="3" aria-pressed="false">3×</button>
+          <button type="button" data-speed="10" aria-pressed="false">10×</button>
+          <button type="button" data-speed="30" aria-pressed="false">30×</button>
+        </div>
+        <p class="speed-note" id="speedNote" aria-live="polite"></p>
+      </section>
+
+      <section class="block" aria-labelledby="condHead">
+        <h2 id="condHead">Conditions</h2>
+        <div class="meter" id="mPlants"><span class="m-label">Plant food</span><span class="m-value"></span><span class="m-bar"><i></i></span></div>
+        <div class="meter" id="mWater"><span class="m-label">Lakes and rivers</span><span class="m-value"></span><span class="m-bar"><i></i></span></div>
+        <div class="meter" id="mSoil"><span class="m-label">Soil moisture</span><span class="m-value"></span><span class="m-bar"><i></i></span></div>
+        <div class="meter" id="mSnow"><span class="m-label">Snow cover</span><span class="m-value"></span><span class="m-bar"><i></i></span></div>
+        <figure class="chart">
+          <canvas id="chart" aria-label="Plant food and water over the last two years"></canvas>
+          <figcaption><span class="key plants"></span>Plant food <span class="key water"></span>Water <span class="key winter"></span>Winter</figcaption>
+        </figure>
+      </section>
+
+      <section class="block" aria-labelledby="notesHead">
+        <h2 id="notesHead">Field notes</h2>
+        <p class="empty" id="notesEmpty">Point at the map to read any spot.</p>
+        <dl class="notes" id="notes" hidden>
+          <div><dt>Land</dt><dd id="nLand"></dd></div>
+          <div><dt>Altitude</dt><dd id="nAlt"></dd></div>
+          <div><dt>Temperature</dt><dd id="nTemp"></dd></div>
+          <div><dt>Plant food</dt><dd id="nFood"></dd></div>
+          <div><dt>Nearest water</dt><dd id="nWater"></dd></div>
+        </dl>
+      </section>
+
+      <section class="block" aria-labelledby="worldHead">
+        <h2 id="worldHead">World</h2>
+        <form class="seed" id="seedForm">
+          <label for="seedInput">Seed</label>
+          <input id="seedInput" name="seed" autocomplete="off" spellcheck="false">
+          <div class="seed-actions">
+            <button class="btn" type="submit">New world</button>
+            <button class="btn quiet" type="button" id="randomSeed">Random seed</button>
+          </div>
+        </form>
+        <p class="fine">The same seed always grows the same world, so you can rerun an experiment.</p>
+      </section>
+
+      <section class="block" aria-labelledby="keyHead">
+        <h2 id="keyHead">Map key</h2>
+        <ul class="legend" id="legend"></ul>
+      </section>
+
+      <footer class="fine foot">
+        <p>Keys: Space pauses, + and − zoom, arrows move, 0 resets the view.</p>
+        <p>Time runs fast: one day passes in about 10 seconds at 1×, and a year has 28 days.</p>
+      </footer>
+    </aside>
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

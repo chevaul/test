@@ -1,0 +1,16 @@
+{
+  "name": "wildgene",
+  "version": "0.1.0",
+  "description": "A browser-based wildlife simulator with DNA-level genetics, evolving populations and a living climate.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "soak": "node test/soak.js",
+    "build": "node tools/build.js",
+    "serve": "python3 -m http.server 8000"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
